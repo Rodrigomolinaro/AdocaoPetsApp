@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.CadastroOngPage"
+             Title="Cadastro de ONG">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Cadastre sua ONG ou Abrigo" 
+                   FontSize="22" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="NomeOngEntry" Placeholder="Nome da Instituição" />
+
+            <Entry x:Name="CnpjEntry" Placeholder="CNPJ" Keyboard="Numeric" />
+
+            <Entry x:Name="EmailEntry" Placeholder="E-mail de Contato" Keyboard="Email" />
+
+            <Entry x:Name="TelefoneEntry" Placeholder="Telefone / WhatsApp" Keyboard="Telephone" />
+
+            <Entry x:Name="CidadeEntry" Placeholder="Cidade Sede" />
+
+            <Entry x:Name="SenhaEntry" Placeholder="Senha de Acesso" IsPassword="True" />
+
+            <Button Text="Cadastrar Instituição" 
+                    Clicked="OnCadastrarOngClicked" 
+                    BackgroundColor="#4CAF50" 
+                    TextColor="White" 
+                    CornerRadius="8" 
+                    Margin="0,20,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

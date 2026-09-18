@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.CadastroAdotantePage"
+             Title="Cadastro de Adotante">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Crie sua conta para adotar!" 
+                   FontSize="22" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="NomeEntry" Placeholder="Nome Completo" />
+
+            <Entry x:Name="CpfEntry" Placeholder="CPF" Keyboard="Numeric" />
+
+            <Entry x:Name="EmailEntry" Placeholder="E-mail" Keyboard="Email" />
+
+            <Entry x:Name="TelefoneEntry" Placeholder="Telefone" Keyboard="Telephone" />
+
+            <Entry x:Name="CidadeEntry" Placeholder="Cidade" />
+
+            <Entry x:Name="SenhaEntry" Placeholder="Senha" IsPassword="True" />
+
+            <Button Text="Cadastrar" 
+                    Clicked="OnCadastrarClicked" 
+                    BackgroundColor="#2196F3" 
+                    TextColor="White" 
+                    CornerRadius="8" 
+                    Margin="0,20,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
