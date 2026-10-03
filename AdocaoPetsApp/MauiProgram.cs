@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using AdocaoPetsApp.Data;
-using System.IO;
+﻿using AdocaoPetsApp.Data;
+using AdocaoPetsApp.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AdocaoPetsApp
 {
@@ -17,18 +18,21 @@ namespace AdocaoPetsApp
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Configura o caminho do banco de dados local
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "AdocaoPets.db3");
+            // Configuração do banco de dados MySQL
+            string connectionString = "Server=localhost;Port=3307;Database=tcc_pets;Uid=root;Pwd=;";
+            // Lembra-te: Usa Server=10.0.2.2 se fores testar no emulador do Android!
 
-            // Registra o DatabaseContext como Singleton
-            builder.Services.AddSingleton(s => new DatabaseContext(dbPath));
-            builder.Services.AddTransient<Views.CadastroAdotantePage>();
-            builder.Services.AddTransient<Views.CadastroOngPage>();
-            builder.Services.AddTransient<Views.LoginPage>();
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            builder.Services.AddTransient<PetService>();
+            builder.Services.AddTransient<Views.CadastroPetPage>();
+            builder.Services.AddTransient<Views.ListagemPetsPage>();
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
+            // A LINHA QUE ESTAVA A FALTAR:
             return builder.Build();
         }
     }

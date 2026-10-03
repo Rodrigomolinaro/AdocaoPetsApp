@@ -12,4 +12,6 @@
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
 
+    <ShellContent ContentTemplate="{DataTemplate local:CadastroPetPage}" Route="CadastroPetPage" Title="Cadastro"/>
+    
 </Shell>

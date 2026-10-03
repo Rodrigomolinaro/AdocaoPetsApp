@@ -11,6 +11,7 @@ namespace AdocaoPetsApp
             // Registrando as rotas para a navegação funcionar
             Routing.RegisterRoute("CadastroAdotantePage", typeof(CadastroAdotantePage));
             Routing.RegisterRoute("CadastroOngPage", typeof(CadastroOngPage));
+            Routing.RegisterRoute(nameof(ListagemPetsPage), typeof(ListagemPetsPage));
         }
     }
 }
