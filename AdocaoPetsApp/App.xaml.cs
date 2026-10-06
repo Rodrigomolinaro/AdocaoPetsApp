@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿namespace AdocaoPetsApp;
 
-namespace AdocaoPetsApp
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
-            MainPage = new AppShell();
-        }
+        InitializeComponent();
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
-        }
+        // APAGUE ou comente qualquer linha que diga MainPage = ...
+        // MainPage = new AppShell(); 
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        // O aplicativo deve ser iniciado exclusivamente por aqui
+        return new Window(new AppShell());
     }
 }

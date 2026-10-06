@@ -31,11 +31,12 @@ public partial class CadastroPetPage : ContentPage
         var novoPet = new Pet
         {
             Nome = NomeEntry.Text,
-            Especie = EspecieEntry.Text,
+            
             Raca = RacaEntry.Text,
             // Adapta esta propriedade de acordo com o teu model Pet.cs
             // Se a idade for int, usamos o int.TryParse
-            // Idade = int.TryParse(IdadeEntry.Text, out int idade) ? idade : 0
+            Idade = int.TryParse(IdadeEntry.Text, out int idade) ? idade : null,
+            IdOng = 1
         };
 
         try

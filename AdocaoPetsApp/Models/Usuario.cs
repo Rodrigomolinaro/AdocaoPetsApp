@@ -1,15 +1,17 @@
-﻿using SQLite;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; // <-- Necessário para o [Table]
 
 namespace AdocaoPetsApp.Models
 {
-    [SQLite.Table("Usuarios")] // <-- Adicionamos SQLite. aqui
+    [Table("Usuarios")] // <-- Trocamos para o formato do Entity Framework
     public class Usuario : Cadastro
     {
-        [PrimaryKey, AutoIncrement]
+        [Key]
         public int IdUsuario { get; set; }
 
-        [Unique]
+        // O Entity Framework não usa [Unique] aqui. 
+        // A garantia de CPF único é feita na configuração do banco de dados.
         public string CPF { get; set; }
 
         public string Senha { get; set; }

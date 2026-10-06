@@ -1,16 +1,39 @@
-﻿using SQLite;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdocaoPetsApp.Models
 {
-    [SQLite.Table("ONGs")] // <-- Adicionamos SQLite. aqui também
-    public class ONG : Cadastro
+    [Table("ong")]
+    public class ONG
     {
-        [PrimaryKey, AutoIncrement]
-        public int IdONG { get; set; }
+        [Key]
+        [Column("id_ong")]
+        public int IdOng { get; set; }
 
-        [Unique]
-        public string CNPJ { get; set; }
+        [Column("nome")]
+        public string Nome { get; set; }
 
-        public string Senha { get; set; }
+        [Column("telefone")]
+        public string? Telefone { get; set; }
+
+        [Column("email")]
+        public string? Email { get; set; }
+
+        [Column("endereco")]
+        public string? Endereco { get; set; }
+
+        [Column("cidade")]
+        public string? Cidade { get; set; }
+
+        [Column("cep")]
+        public string? Cep { get; set; }
+
+        [Column("nome_ong")]
+        public string? NomeOng { get; set; }
+
+        [Column("cnpj")]
+        public string? Cnpj { get; set; }
+
+        [Column("senha")] public string? Senha { get; set; }
     }
 }

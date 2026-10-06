@@ -26,7 +26,7 @@ namespace AdocaoPetsApp.Views
             var novaOng = new ONG
             {
                 Nome = NomeOngEntry.Text,
-                CNPJ = CnpjEntry.Text,
+                Cnpj = CnpjEntry.Text,
                 Email = EmailEntry.Text,
                 Telefone = TelefoneEntry.Text,
                 Cidade = CidadeEntry.Text,

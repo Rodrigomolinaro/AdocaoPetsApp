@@ -24,9 +24,9 @@ namespace AdocaoPetsApp
 
             builder.Services.AddDbContext<DatabaseContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            builder.Services.AddTransient<PetService>();
-            builder.Services.AddTransient<Views.CadastroPetPage>();
-            builder.Services.AddTransient<Views.ListagemPetsPage>();
+            builder.Services.AddTransient<AdocaoPetsApp.Services.PetService>();
+            builder.Services.AddTransient<AdocaoPetsApp.Views.CadastroPetPage>();
+            builder.Services.AddTransient<AdocaoPetsApp.Views.ListagemPetsPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
