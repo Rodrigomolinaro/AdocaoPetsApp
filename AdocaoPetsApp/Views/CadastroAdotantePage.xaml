@@ -2,34 +2,41 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AdocaoPetsApp.Views.CadastroAdotantePage"
-             Title="Cadastro de Adotante">
+             Title="Criar Conta - Adotante">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Spacing="15" Padding="30">
 
-            <Label Text="Crie sua conta para adotar!" 
-                   FontSize="22" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center" />
+            <Label Text="Dados Pessoais" FontSize="24" FontAttributes="Bold" TextColor="#2c3e50" Margin="0,0,0,10"/>
 
             <Entry x:Name="NomeEntry" Placeholder="Nome Completo" />
 
-            <Entry x:Name="CpfEntry" Placeholder="CPF" Keyboard="Numeric" />
-
-            <Entry x:Name="EmailEntry" Placeholder="E-mail" Keyboard="Email" />
+            <Entry x:Name="CpfEntry" Placeholder="CPF" Keyboard="Numeric" MaxLength="14" />
 
             <Entry x:Name="TelefoneEntry" Placeholder="Telefone" Keyboard="Telephone" />
 
+            <Entry x:Name="EmailEntry" Placeholder="E-mail" Keyboard="Email" />
+
+            <Label Text="Endereço" FontSize="20" FontAttributes="Bold" TextColor="#2c3e50" Margin="0,15,0,5"/>
+
+            <Entry x:Name="CepEntry" Placeholder="CEP" Keyboard="Numeric" MaxLength="9" />
+
+            <Entry x:Name="EnderecoEntry" Placeholder="Endereço (Rua, Número, Bairro)" />
+
             <Entry x:Name="CidadeEntry" Placeholder="Cidade" />
 
-            <Entry x:Name="SenhaEntry" Placeholder="Senha" IsPassword="True" />
+            <Label Text="Segurança" FontSize="20" FontAttributes="Bold" TextColor="#2c3e50" Margin="0,15,0,5"/>
 
-            <Button Text="Cadastrar" 
-                    Clicked="OnCadastrarClicked" 
-                    BackgroundColor="#2196F3" 
+            <Entry x:Name="SenhaEntry" Placeholder="Crie uma senha" IsPassword="True" />
+
+            <Entry x:Name="ConfirmarSenhaEntry" Placeholder="Confirme a senha" IsPassword="True" />
+
+            <Button Text="Finalizar Cadastro" 
+                    Clicked="OnSalvarAdotanteClicked" 
+                    BackgroundColor="#007bff" 
                     TextColor="White" 
-                    CornerRadius="8" 
-                    Margin="0,20,0,0"/>
+                    CornerRadius="8"
+                    Margin="0, 30, 0, 10"/>
 
         </VerticalStackLayout>
     </ScrollView>

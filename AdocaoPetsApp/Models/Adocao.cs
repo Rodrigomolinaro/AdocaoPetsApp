@@ -15,21 +15,15 @@ namespace AdocaoPetsApp.Models
         public DateTime? DataSolicitacao { get; set; }
 
         [Column("status_adocao")]
-        public string StatusAdocao { get; set; }
+        public string? StatusAdocao { get; set; }
 
         [Column("observacoes")]
-        public string Observacoes { get; set; }
+        public string? Observacoes { get; set; }
 
         [Column("id_usuario")]
         public int IdUsuario { get; set; }
 
         [Column("id_pet")]
         public int IdPet { get; set; }
-
-        [ForeignKey("IdUsuario")]
-        public Usuario Usuario { get; set; }
-
-        [ForeignKey("IdPet")]
-        public Pet Pet { get; set; }
     }
 }

@@ -33,18 +33,19 @@ namespace AdocaoPetsApp.Views
                 Senha = SenhaEntry.Text
             };
 
-            // Salva no banco de dados local
-            await _database.SalvarOngAsync(novaOng);
+            // Salva no banco de dados local e guarda o resultado
+            bool sucesso = await _database.SalvarOngAsync(novaOng);
 
-            await DisplayAlert("Sucesso", "ONG cadastrada com sucesso! Pronta para salvar vidas.", "OK");
-
-            // Limpa os campos
-            NomeOngEntry.Text = string.Empty;
-            CnpjEntry.Text = string.Empty;
-            EmailEntry.Text = string.Empty;
-            TelefoneEntry.Text = string.Empty;
-            CidadeEntry.Text = string.Empty;
-            SenhaEntry.Text = string.Empty;
+            if (sucesso)
+            {
+                await DisplayAlert("Sucesso", "ONG cadastrada com sucesso! Pronta para salvar vidas.", "OK");
+                // Retorna automaticamente para a tela de Login
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Erro", "Ocorreu um problema ao salvar os dados da ONG no banco de dados.", "OK");
+            }
         }
     }
 }

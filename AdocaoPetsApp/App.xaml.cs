@@ -1,18 +1,14 @@
 ﻿namespace AdocaoPetsApp;
 
+using AdocaoPetsApp.Views;
+
 public partial class App : Application
 {
-    public App()
+    public App(LoginPage loginPage)
     {
         InitializeComponent();
 
-        // APAGUE ou comente qualquer linha que diga MainPage = ...
-        // MainPage = new AppShell(); 
-    }
-
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        // O aplicativo deve ser iniciado exclusivamente por aqui
-        return new Window(new AppShell());
+        // O NavigationPage habilita a navegação entre as telas e cria a barra superior nativa
+        MainPage = new NavigationPage(loginPage);
     }
 }

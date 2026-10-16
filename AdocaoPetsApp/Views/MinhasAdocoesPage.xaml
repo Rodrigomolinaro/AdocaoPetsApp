@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.MinhasAdocoesPage"
+             Title="Minhas Adoções">
+
+    <Grid Padding="15">
+        <CollectionView x:Name="MinhasAdocoesCollectionView">
+            <CollectionView.EmptyView>
+                <Label Text="Você ainda não enviou nenhum pedido de adoção." 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       FontSize="16" 
+                       TextColor="Gray"/>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,15" Padding="15" CornerRadius="10" BorderColor="#E0E0E0" HasShadow="True">
+                        <StackLayout Spacing="5">
+                            <Label Text="{Binding NomePet, StringFormat='🐾 Pet: {0}'}" FontAttributes="Bold" FontSize="18" TextColor="#2B0B98"/>
+                            <Label Text="{Binding DataSolicitacao, StringFormat='📅 Solicitado em: {0:dd/MM/yyyy}'}" FontSize="14" TextColor="#555"/>
+
+                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                <Label Text="Status:" FontSize="15" FontAttributes="Bold" TextColor="#333"/>
+                                <Label Text="{Binding StatusAdocao}" FontSize="15" FontAttributes="Bold" />
+                            </StackLayout>
+
+                            <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10" />
+
+                            <Label Text="Contato da ONG:" FontSize="14" FontAttributes="Bold" TextColor="#555"/>
+                            <Label Text="{Binding NomeAdotante}" FontSize="14" TextColor="#555"/>
+                            <Label Text="{Binding EmailAdotante}" FontSize="14" TextColor="#007bff"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

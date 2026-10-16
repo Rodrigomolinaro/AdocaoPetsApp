@@ -29,13 +29,14 @@ namespace AdocaoPetsApp.Views
             {
                 if (usuarioAutenticado is Usuario adotante)
                 {
-                    await DisplayAlert("Sucesso", $"Bem-vindo, {adotante.Nome}!", "OK");
-                    // Nas próximas etapas, aqui colocaremos o código para abrir a tela com a Lista de Pets
+                    // Abre a tela com a Lista de Pets passando a conexão do banco de dados
+
+                    Application.Current.MainPage = new NavigationPage(new ListagemPetsPage(_database, adotante));
                 }
                 else if (usuarioAutenticado is ONG ong)
                 {
-                    await DisplayAlert("Sucesso", $"Bem-vinda, ONG {ong.Nome}!", "OK");
-                    // Nas próximas etapas, aqui colocaremos o código para abrir o Dashboard da ONG para cadastrar os pets
+                    // Passamos não apenas o banco, mas também os dados da ONG logada
+                    Application.Current.MainPage = new NavigationPage(new DashboardOngPage(_database, ong));
                 }
             }
             else
@@ -46,14 +47,14 @@ namespace AdocaoPetsApp.Views
 
         private async void OnIrParaCadastroAdotanteClicked(object sender, EventArgs e)
         {
-            // Navega para a tela de Cadastro de Adotante
-            await Shell.Current.GoToAsync("CadastroAdotantePage");
+            // Navega para a tela de Cadastro de Adotante passando o banco de dados
+            await Navigation.PushAsync(new CadastroAdotantePage(_database));
         }
 
         private async void OnIrParaCadastroOngClicked(object sender, EventArgs e)
         {
-            // Navega para a tela de Cadastro de ONG
-            await Shell.Current.GoToAsync("CadastroOngPage");
+            // Navega para a tela de Cadastro de ONG passando o banco de dados
+            await Navigation.PushAsync(new CadastroOngPage(_database));
         }
     }
 }

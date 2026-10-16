@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.DashboardOngPage"
+             Title="Painel da ONG">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sair" Clicked="OnSairClicked" />
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout Padding="20" Spacing="20" VerticalOptions="Center">
+
+        <Label Text="Área de Gerenciamento" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#2B0B98" />
+        <Label Text="Bem-vinda! Use este painel para adicionar novos animais ao sistema de adoção." FontSize="16" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,0,0,20"/>
+
+        <Button Text="Cadastrar Novo Pet" 
+                Clicked="OnCadastrarPetClicked" 
+                BackgroundColor="#2B0B98" 
+                TextColor="White" 
+                FontAttributes="Bold"
+                CornerRadius="8" 
+                HeightRequest="50" />
+
+        <!-- Novo botão para gerenciar os pets cadastrados -->
+        <Button Text="Gerenciar Meus Pets (Adotados/Ativos)" 
+                Clicked="OnGerenciarPetsClicked" 
+                BackgroundColor="#17a2b8" 
+                TextColor="White" 
+                FontAttributes="Bold"
+                CornerRadius="8" 
+                HeightRequest="50" />
+
+        <Button Text="Ver Pedidos de Adoção" 
+        Clicked="OnVerPedidosClicked" 
+        BackgroundColor="#007bff" 
+        TextColor="White" 
+        Margin="0,10,0,0"/>
+
+    </VerticalStackLayout>
+</ContentPage>

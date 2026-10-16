@@ -1,60 +1,77 @@
+using AdocaoPetsApp.Data;
 using AdocaoPetsApp.Models;
-using AdocaoPetsApp.Services;
+using System;
+using Microsoft.Maui.Controls;
 
-namespace AdocaoPetsApp.Views;
-
-public partial class CadastroPetPage : ContentPage
+namespace AdocaoPetsApp.Views
 {
-    private readonly PetService _petService;
+    public partial class CadastroPetPage : ContentPage
+    {
+        private readonly DatabaseContext _database;
 
-    // O MAUI injeta automaticamente o PetService aqui
-    public CadastroPetPage(PetService petService)
-    {
-        InitializeComponent();
-        _petService = petService;
-    }
-    private async void OnVerPetsClicked(object sender, EventArgs e)
-    {
-        // Navega para a tela de listagem usando a rota que registámos
-        await Shell.Current.GoToAsync(nameof(ListagemPetsPage));
-    }
-    private async void OnSalvarClicked(object sender, EventArgs e)
-    {
-        // Validação básica
-        if (string.IsNullOrWhiteSpace(NomeEntry.Text) || string.IsNullOrWhiteSpace(EspecieEntry.Text))
+        // 1. Corrigido: Apenas uma definição e usando o tipo ONG!
+        private readonly ONG _ongLogada;
+
+        // 2. Corrigido: O construtor agora recebe ONG em vez de Usuario
+        public CadastroPetPage(DatabaseContext database, ONG ongLogada)
         {
-            await DisplayAlert("Erro", "Preencha pelo menos o nome e a espécie.", "OK");
-            return;
+            InitializeComponent();
+            _database = database;
+            _ongLogada = ongLogada;
         }
 
-        // Instancia o modelo com os dados digitados
-        var novoPet = new Pet
+        private async void OnSalvarClicked(object sender, EventArgs e)
         {
-            Nome = NomeEntry.Text,
-            
-            Raca = RacaEntry.Text,
-            // Adapta esta propriedade de acordo com o teu model Pet.cs
-            // Se a idade for int, usamos o int.TryParse
-            Idade = int.TryParse(IdadeEntry.Text, out int idade) ? idade : null,
-            IdOng = 1
-        };
+            // Pega a idade com segurança
+            int idade = 0;
+            int.TryParse(IdadeEntry.Text, out idade);
 
-        try
-        {
-            // Envia para o serviço gravar no MySQL
-            await _petService.SalvarPetAsync(novoPet);
+            var novoPet = new Pet
+            {
+                Nome = NomeEntry.Text,
+                Especie = EspecieEntry.Text,
+                Raca = RacaEntry.Text,
+                Idade = idade,
+                ImagemUrl = ImagemUrlEntry.Text,
+                Porte = PorteEntry.Text,
+                Sexo = SexoEntry.Text,
+                Cor = CorEntry.Text,
+                Descricao = DescricaoEntry.Text, // 3. Corrigido: A vírgula que faltava está aqui!
+                IdUsuario = _ongLogada.IdOng // O Pet agora fica amarrado à ONG
+            };
 
-            await DisplayAlert("Sucesso", $"{novoPet.Nome} foi salvo no banco de dados!", "OK");
+            _database.Pets.Add(novoPet);
+            bool sucesso = await _database.SaveChangesAsync() > 0;
 
-            // Limpa os campos após salvar
-            NomeEntry.Text = "";
-            EspecieEntry.Text = "";
-            RacaEntry.Text = "";
-            IdadeEntry.Text = "";
+            if (sucesso)
+            {
+                await DisplayAlert("Sucesso", "Pet cadastrado com sucesso!", "OK");
+
+                // Limpa os campos do formulário para o próximo cadastro
+                NomeEntry.Text = "";
+                EspecieEntry.Text = "";
+                RacaEntry.Text = "";
+                IdadeEntry.Text = "";
+                ImagemUrlEntry.Text = "";
+                PorteEntry.Text = "";
+                SexoEntry.Text = "";
+                CorEntry.Text = "";
+                DescricaoEntry.Text = "";
+            }
+            else
+            {
+                await DisplayAlert("Erro", "Ocorreu um erro ao salvar o pet.", "OK");
+            }
         }
-        catch (Exception ex)
+
+        private async void OnVerPetsClicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Erro ao salvar", ex.Message, "OK");
+            await Navigation.PushAsync(new ListagemPetsPage(_database, null));
+        }
+
+        private async void OnVerPedidosClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SolicitacoesPage(_database));
         }
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.SolicitacoesPage"
+             Title="Pedidos de Adoção">
+
+    <Grid Padding="15">
+        <CollectionView x:Name="SolicitacoesCollectionView">
+            <!-- Mensagem caso não haja pedidos -->
+            <CollectionView.EmptyView>
+                <Label Text="Nenhum pedido de adoção pendente." 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" 
+                       FontSize="18" 
+                       TextColor="Gray"/>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!-- Cartão do Pedido -->
+                    <Frame Margin="0,0,0,15" Padding="15" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
+                        <StackLayout Spacing="5">
+                            <Label Text="{Binding NomePet, StringFormat='🐾 Pet: {0}'}" FontAttributes="Bold" FontSize="18" TextColor="#333"/>
+                            <Label Text="{Binding NomeAdotante, StringFormat='👤 Adotante: {0}'}" FontSize="15" TextColor="#555"/>
+                            <Label Text="{Binding EmailAdotante, StringFormat='✉️ Contato: {0}'}" FontSize="14" TextColor="#555"/>
+                            <Label Text="{Binding DataSolicitacao, StringFormat='📅 Data: {0:dd/MM/yyyy}'}" FontSize="12" TextColor="Gray" Margin="0,0,0,10"/>
+
+                            <Button Text="Aprovar Adoção" 
+                                    BackgroundColor="#28a745" 
+                                    TextColor="White" 
+                                    FontAttributes="Bold"
+                                    CornerRadius="8"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnAprovarClicked"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

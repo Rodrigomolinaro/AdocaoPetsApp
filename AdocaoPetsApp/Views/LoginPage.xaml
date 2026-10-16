@@ -2,49 +2,46 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AdocaoPetsApp.Views.LoginPage"
-             Title="Login">
+             Title="Bem-vindo(a)!">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
 
-            <Image Source="dotnet_bot.png" HeightRequest="150" HorizontalOptions="Center" />
-
-            <Label Text="Sistema de Adoção de Pets" 
-                   FontSize="24" 
+            <Label Text="🐾 Adote um Pet" 
+                   FontSize="32" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
-                   Margin="0,0,0,20"/>
+                   TextColor="#2c3e50"
+                   Margin="0, 0, 0, 40"/>
 
-            <Entry x:Name="EmailOuDocumentoEntry" Placeholder="CPF, CNPJ ou E-mail" />
+            <Entry x:Name="EmailOuDocumentoEntry" 
+                   Placeholder="E-mail, CPF ou CNPJ" 
+                   Keyboard="Default" 
+                   ClearButtonVisibility="WhileEditing"/>
 
-            <Entry x:Name="SenhaEntry" Placeholder="Senha" IsPassword="True" />
+            <Entry x:Name="SenhaEntry" 
+                   Placeholder="Digite a sua senha" 
+                   IsPassword="True" 
+                   ClearButtonVisibility="WhileEditing"/>
 
             <Button Text="Entrar" 
                     Clicked="OnLoginClicked" 
-                    BackgroundColor="#2196F3" 
+                    BackgroundColor="#5cb85c" 
                     TextColor="White" 
-                    CornerRadius="8" />
+                    CornerRadius="8"
+                    Margin="0, 20, 0, 0"/>
 
-            <BoxView HeightRequest="1" Color="LightGray" Margin="0,20" />
-
-            <Label Text="Ainda não tem uma conta?" 
-                   HorizontalOptions="Center" 
-                   TextColor="Gray"/>
-
-            <Button Text="Quero Adotar (Adotante)" 
+            <!-- Botões de navegação para os cadastros previstos na Sprint 1 -->
+            <Button Text="Quero adotar (Cadastro Pessoa Física)" 
                     Clicked="OnIrParaCadastroAdotanteClicked" 
                     BackgroundColor="Transparent" 
-                    TextColor="#2196F3" 
-                    BorderColor="#2196F3"
-                    BorderWidth="1"
+                    TextColor="#007bff" 
                     CornerRadius="8"/>
 
-            <Button Text="Sou uma Instituição (ONG)" 
+            <Button Text="Sou uma ONG (Cadastro Instituição)" 
                     Clicked="OnIrParaCadastroOngClicked" 
                     BackgroundColor="Transparent" 
-                    TextColor="#4CAF50" 
-                    BorderColor="#4CAF50"
-                    BorderWidth="1"
+                    TextColor="#e67e22" 
                     CornerRadius="8"/>
 
         </VerticalStackLayout>

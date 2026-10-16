@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdocaoPetsApp.Views.GerenciarPetsPage"
+             Title="Meus Pets Cadastrados">
+
+    <Grid Padding="20" RowDefinitions="Auto, *">
+
+        <Label Grid.Row="0" Text="Gerenciar Animais da ONG" FontSize="22" FontAttributes="Bold" Margin="0,0,0,15" HorizontalOptions="Center" TextColor="#2B0B98" />
+
+        <CollectionView Grid.Row="1" x:Name="MeusPetsCollectionView">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5,0,5" Padding="15" CornerRadius="8" BorderColor="LightGray" HasShadow="True">
+                        <VerticalStackLayout>
+
+                            <!-- Imagem restrita para não esticar -->
+                            <Grid HeightRequest="150" WidthRequest="300" HorizontalOptions="Center" Margin="0,0,0,10">
+                                <Image Source="{Binding ImagemUrl}" 
+                                       Aspect="AspectFill"
+                                       HeightRequest="150"
+                                       WidthRequest="300" />
+                            </Grid>
+
+                            <Label Text="{Binding Nome}" FontSize="18" FontAttributes="Bold" TextColor="#2B0B98"/>
+
+                            <HorizontalStackLayout Spacing="5">
+                                <Label Text="Espécie:" FontAttributes="Bold"/>
+                                <Label Text="{Binding Especie}" />
+                                <Label Text=" | Raça:" FontAttributes="Bold" Margin="10,0,0,0"/>
+                                <Label Text="{Binding Raca}" />
+                            </HorizontalStackLayout>
+
+                            <!-- Linha com os detalhes adicionais (Porte, Sexo e Cor) -->
+                            <HorizontalStackLayout Spacing="5" Margin="0,3,0,0">
+                                <Label Text="Porte:" FontAttributes="Bold"/>
+                                <Label Text="{Binding Porte}" />
+                                <Label Text=" | Sexo:" FontAttributes="Bold" Margin="5,0,0,0"/>
+                                <Label Text="{Binding Sexo}" />
+                                <Label Text=" | Cor:" FontAttributes="Bold" Margin="5,0,0,0"/>
+                                <Label Text="{Binding Cor}" />
+                            </HorizontalStackLayout>
+
+                            <!-- Botão para dar baixa no pet -->
+                            <Button Text="Marcar como Adotado 🏠" 
+                                    BackgroundColor="#28a745" 
+                                    TextColor="White" 
+                                    CornerRadius="5"
+                                    Margin="0,10,0,0"
+                                    HeightRequest="40"
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnMarcarComoAdotadoClicked" />
+
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Label Text="Você ainda não cadastrou nenhum pet." 
+                       HorizontalOptions="Center" VerticalOptions="Center" Margin="20"/>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>

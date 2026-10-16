@@ -1,39 +1,43 @@
-﻿using AdocaoPetsApp.Data;
-using AdocaoPetsApp.Services;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using AdocaoPetsApp.Data;
 
-namespace AdocaoPetsApp
+// O namespace é fundamental para as outras pastas (Android, iOS, Windows) acharem este arquivo!
+namespace AdocaoPetsApp;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
+        var builder = MauiApp.CreateBuilder();
+
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        // 1. A sua connection string (porta 3307 do TCC)
+        string connectionString = "Server=127.0.0.1;Port=3307;Database=tcc_pets;Uid=root;Pwd=;";
+
+        // 2. Configuração do Entity Framework com o Pomelo MySQL
+        builder.Services.AddDbContext<DatabaseContext>(options =>
         {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        });
 
-            // Configuração do banco de dados MySQL
-            string connectionString = "Server=localhost;Port=3307;Database=tcc_pets;Uid=root;Pwd=;";
-            // Lembra-te: Usa Server=10.0.2.2 se fores testar no emulador do Android!
-
-            builder.Services.AddDbContext<DatabaseContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-            builder.Services.AddTransient<AdocaoPetsApp.Services.PetService>();
-            builder.Services.AddTransient<AdocaoPetsApp.Views.CadastroPetPage>();
-            builder.Services.AddTransient<AdocaoPetsApp.Views.ListagemPetsPage>();
+        // 3. Registramos as páginas para a injeção de dependência funcionar corretamente
+        builder.Services.AddTransient<Views.LoginPage>();
+        builder.Services.AddTransient<Views.CadastroAdotantePage>();
+        builder.Services.AddTransient<Views.CadastroOngPage>();
+        builder.Services.AddTransient<Views.ListagemPetsPage>();
 
 #if DEBUG
-            builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            // A LINHA QUE ESTAVA A FALTAR:
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

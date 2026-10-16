@@ -1,23 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AdocaoPetsApp.Views.ListagemPetsPage"
              Title="Pets Cadastrados">
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="Animais Disponíveis" FontSize="22" FontAttributes="Bold" Margin="0,0,0,15" HorizontalOptions="Center" />
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Sair" Clicked="OnSairClicked" />
+    </ContentPage.ToolbarItems>
 
-        <CollectionView x:Name="PetsCollectionView">
+    <Grid Padding="20" RowDefinitions="Auto, Auto, *">
+
+        <!-- Linha 0: Título -->
+        <Label Grid.Row="0" Text="Animais Disponíveis" FontSize="22" FontAttributes="Bold" Margin="0,0,0,10" HorizontalOptions="Center" TextColor="#2B0B98" />
+
+        <!-- Linha 1: Botões de Filtro Rápido -->
+        <HorizontalStackLayout Grid.Row="1" Spacing="10" HorizontalOptions="Center" Margin="0,0,0,15">
+            <Button Text="Todos" Clicked="OnFiltrarTodosClicked" BackgroundColor="#6c757d" TextColor="White" HeightRequest="35" CornerRadius="15"/>
+            <Button Text="Cachorros 🐶" Clicked="OnFiltrarCachorroClicked" BackgroundColor="#2B0B98" TextColor="White" HeightRequest="35" CornerRadius="15"/>
+            <Button Text="Gatos 🐱" Clicked="OnFiltrarGatoClicked" BackgroundColor="#2B0B98" TextColor="White" HeightRequest="35" CornerRadius="15"/>
+            <Button Text="Minhas Adoções" 
+        Clicked="OnMinhasAdocoesClicked" 
+        BackgroundColor="#007bff" 
+        TextColor="White" 
+        Margin="0,0,0,10"
+        CornerRadius="8"/>
+        </HorizontalStackLayout>
+
+        <!-- Linha 2: A Coleção de Pets com Rolagem -->
+        <CollectionView Grid.Row="2" x:Name="PetsCollectionView">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Margin="0,5,0,5" Padding="15" CornerRadius="8" BorderColor="LightGray" HasShadow="True">
                         <VerticalStackLayout>
+
+                            <!-- Imagem compacta e centralizada -->
+                            <Grid HeightRequest="150" WidthRequest="300" HorizontalOptions="Center" Margin="0,0,0,10">
+                                <Image Source="{Binding ImagemUrl}" 
+                                       Aspect="AspectFill"
+                                       HeightRequest="150"
+                                       WidthRequest="300" />
+                            </Grid>
+
                             <Label Text="{Binding Nome}" FontSize="18" FontAttributes="Bold" TextColor="#2B0B98"/>
+
                             <HorizontalStackLayout Spacing="5">
                                 <Label Text="Espécie:" FontAttributes="Bold"/>
                                 <Label Text="{Binding Especie}" />
                                 <Label Text=" | Raça:" FontAttributes="Bold" Margin="10,0,0,0"/>
                                 <Label Text="{Binding Raca}" />
                             </HorizontalStackLayout>
+
+                            <!-- Linha com os novos dados vindos do banco -->
+                            <HorizontalStackLayout Spacing="5" Margin="0,3,0,0">
+                                <Label Text="Porte:" FontAttributes="Bold"/>
+                                <Label Text="{Binding Porte}" />
+                                <Label Text=" | Sexo:" FontAttributes="Bold" Margin="5,0,0,0"/>
+                                <Label Text="{Binding Sexo}" />
+                                <Label Text=" | Cor:" FontAttributes="Bold" Margin="5,0,0,0"/>
+                                <Label Text="{Binding Cor}" />
+                            </HorizontalStackLayout>
+
+                            <Label Text="{Binding IdOng, StringFormat='ID da ONG responsável: {0}'}" FontSize="12" TextColor="Gray" Margin="0,5,0,0"/>
+
+                            <Button Text="Quero Adotar" 
+        Clicked="OnAdotarClicked" 
+        CommandParameter="{Binding .}" 
+        BackgroundColor="#FF6A00" 
+        TextColor="White" 
+        CornerRadius="10" 
+        FontAttributes="Bold"/>
+
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
@@ -28,5 +80,5 @@
                        HorizontalOptions="Center" VerticalOptions="Center" Margin="20"/>
             </CollectionView.EmptyView>
         </CollectionView>
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>
