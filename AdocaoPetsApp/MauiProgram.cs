@@ -20,7 +20,7 @@ public static class MauiProgram
             });
 
         // 1. A sua connection string (porta 3307 do TCC)
-        string connectionString = "Server=127.0.0.1;Port=3307;Database=tcc_pets;Uid=root;Pwd=;";
+        string connectionString = "Server=10.0.2.2;Port=3307;Database=tcc_pets;Uid=root;Pwd=;";
 
         // 2. Configuração do Entity Framework com o Pomelo MySQL
         builder.Services.AddDbContext<DatabaseContext>(options =>

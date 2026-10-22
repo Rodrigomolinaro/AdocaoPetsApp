@@ -22,6 +22,14 @@ namespace AdocaoPetsApp.Views
 
         private async void OnSalvarClicked(object sender, EventArgs e)
         {
+            // --- INÍCIO DA BLINDAGEM DE SEGURANÇA ---
+            if (string.IsNullOrWhiteSpace(NomeEntry.Text) || string.IsNullOrWhiteSpace(EspecieEntry.Text))
+            {
+                await DisplayAlert("Aviso", "O Nome e a Espécie do pet são obrigatórios!", "OK");
+                return; // Impede que o código continue e aborte o salvamento
+            }
+            // --- FIM DA BLINDAGEM ---
+
             // Pega a idade com segurança
             int idade = 0;
             int.TryParse(IdadeEntry.Text, out idade);
@@ -36,7 +44,7 @@ namespace AdocaoPetsApp.Views
                 Porte = PorteEntry.Text,
                 Sexo = SexoEntry.Text,
                 Cor = CorEntry.Text,
-                Descricao = DescricaoEntry.Text, // 3. Corrigido: A vírgula que faltava está aqui!
+                Descricao = DescricaoEntry.Text,
                 IdUsuario = _ongLogada.IdOng // O Pet agora fica amarrado à ONG
             };
 

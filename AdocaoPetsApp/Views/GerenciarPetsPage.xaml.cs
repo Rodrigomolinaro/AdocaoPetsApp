@@ -18,44 +18,52 @@ namespace AdocaoPetsApp.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await CarregarMeusPetsAsync();
+            await CarregarPets();
         }
 
-        private async Task CarregarMeusPetsAsync()
+        private async Task CarregarPets()
         {
-            // Busca apenas os pets que pertencem ao ID desta ONG e que ainda não foram adotados
-            var listaPets = await _database.ObterPetsPorOngAsync(_ongLogada.IdOng);
-
-            // Filtra para exibir apenas os que não estão adotados na lista de gestão
-            MeusPetsCollectionView.ItemsSource = listaPets.Where(p => p.Adotado != true);
+            // O seu método já está pronto no DatabaseContext! Ele puxa só os pets desta ONG
+            var meusPets = await _database.ObterPetsPorOngAsync(_ongLogada.IdOng);
+            PetsCollectionView.ItemsSource = meusPets;
         }
 
-        private async void OnMarcarComoAdotadoClicked(object sender, EventArgs e)
+        private async void OnExcluirClicked(object sender, EventArgs e)
         {
             var botao = sender as Button;
-            var petSelecionado = botao?.CommandParameter as Pet;
+            var pet = botao?.CommandParameter as Pet;
 
-            if (petSelecionado != null)
+            if (pet != null)
             {
-                bool confirmar = await DisplayAlert("Confirmação",
-                    $"Deseja marcar {petSelecionado.Nome} como adotado? Ele sairá da lista pública de adoção.",
-                    "Sim", "Não");
+                // Confirmação de segurança para evitar cliques acidentais
+                bool confirmar = await DisplayAlert("Excluir", $"Tem a certeza que deseja remover o {pet.Nome} permanentemente do sistema?", "Sim", "Não");
 
                 if (confirmar)
                 {
-                    bool sucesso = await _database.MarcarComoAdotadoAsync(petSelecionado.IdPet);
+                    _database.Pets.Remove(pet);
+                    bool sucesso = await _database.SaveChangesAsync() > 0;
 
                     if (sucesso)
                     {
-                        await DisplayAlert("Sucesso", $"{petSelecionado.Nome} encontrou um lar! 🎉", "OK");
-                        // Recarrega a lista para sumir com o pet adotado
-                        await CarregarMeusPetsAsync();
+                        await CarregarPets(); // Atualiza a lista na hora, fazendo o pet sumir do ecrã
                     }
                     else
                     {
-                        await DisplayAlert("Erro", "Não foi possível atualizar o status do pet.", "OK");
+                        await DisplayAlert("Erro", "Não foi possível excluir o pet.", "OK");
                     }
                 }
+            }
+        }
+
+        private async void OnEditarClicked(object sender, EventArgs e)
+        {
+            var botao = sender as Button;
+            var pet = botao?.CommandParameter as Pet;
+
+            if (pet != null)
+            {
+                // Substituímos o alerta pela abertura da nova tela, enviando o pet escolhido
+                await Navigation.PushAsync(new EditarPetPage(_database, pet));
             }
         }
     }
