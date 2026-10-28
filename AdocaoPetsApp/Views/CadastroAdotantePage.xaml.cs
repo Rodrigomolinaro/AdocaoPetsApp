@@ -20,6 +20,10 @@ public partial class CadastroAdotantePage : ContentPage
             CepEntry.Text, EnderecoEntry.Text, CidadeEntry.Text, SenhaEntry.Text
         );
 
-        if (sucesso) await Navigation.PopAsync();
+        if (sucesso)
+        {
+            await DisplayAlert("Sucesso", "Cadastro realizado com sucesso!", "OK");
+            await Navigation.PopAsync();
+        }
     }
 }

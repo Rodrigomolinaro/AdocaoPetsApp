@@ -1,21 +1,25 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema; // <-- Necessário para o [Table]
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdocaoPetsApp.Models
 {
-    [Table("Usuarios")] // <-- Trocamos para o formato do Entity Framework
+    [Table("usuario")] // O nome da tabela no banco está em minúsculas
     public class Usuario : Cadastro
     {
         [Key]
+        [Column("id_usuario")]
         public int IdUsuario { get; set; }
 
-        // O Entity Framework não usa [Unique] aqui. 
-        // A garantia de CPF único é feita na configuração do banco de dados.
+        [Column("cpf")]
         public string CPF { get; set; }
 
+        [Column("senha")]
         public string Senha { get; set; }
-        public DateTime DataCadastro { get; set; }
+
+        // O ponto de interrogação (?) salva a pátria aqui, pois aceita nulos do banco!
+        [Column("data_cadastro")]
+        public DateTime? DataCadastro { get; set; }
 
         public Usuario()
         {

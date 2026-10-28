@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using AdocaoPetsApp.Data;
 using AdocaoPetsApp.Models;
 
@@ -23,9 +24,35 @@ namespace AdocaoPetsApp.Views
 
         private async Task CarregarPets()
         {
-            // O seu método já está pronto no DatabaseContext! Ele puxa só os pets desta ONG
-            var meusPets = await _database.ObterPetsPorOngAsync(_ongLogada.IdOng);
-            PetsCollectionView.ItemsSource = meusPets;
+            try
+            {
+                // 1. Tenta ir ao banco de dados com segurança
+                var meusPets = await _database.Pets
+                    .Where(p => p.IdOng == _ongLogada.IdOng)
+                    .ToListAsync();
+
+                // 2. Garante que a atualização da lista ocorre na thread de interface do Android
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    PetsCollectionView.ItemsSource = meusPets;
+
+                    // Alerta de diagnóstico se a lista voltar vazia
+                    if (meusPets == null || meusPets.Count == 0)
+                    {
+                        await DisplayAlert("Diagnóstico", $"Nenhum pet encontrado para a ONG ID: {_ongLogada.IdOng}", "OK");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // 3. Intercepta o crash fatal e mostra o ERRO REAL no ecrã do celular
+                string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("Erro Oculto", $"O verdadeiro erro é: {erroReal}", "OK");
+                });
+            }
         }
 
         private async void OnExcluirClicked(object sender, EventArgs e)

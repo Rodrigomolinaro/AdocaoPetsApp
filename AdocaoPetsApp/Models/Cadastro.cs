@@ -1,14 +1,25 @@
-﻿using SQLite;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdocaoPetsApp.Models
 {
     public abstract class Cadastro
     {
-        public string Nome { get; set; }
-        public string Telefone { get; set; }
-        public string Email { get; set; }
-        public string Endereco { get; set; }
-        public string Cidade { get; set; }
-        public string CEP { get; set; }
+        [Column("nome")]
+        public string? Nome { get; set; }
+
+        [Column("telefone")]
+        public string? Telefone { get; set; }
+
+        [Column("email")]
+        public string? Email { get; set; }
+
+        [Column("endereco")]
+        public string? Endereco { get; set; }
+
+        [Column("cidade")]
+        public string? Cidade { get; set; }
+
+        [Column("cep")]
+        public string? CEP { get; set; }
     }
 }

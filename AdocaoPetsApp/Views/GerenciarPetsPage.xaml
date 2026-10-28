@@ -16,33 +16,30 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Margin="0,0,0,15" Padding="15" CornerRadius="10" BorderColor="#E0E0E0" HasShadow="True">
-                        <StackLayout>
+                    <Border Margin="0,0,0,15" Padding="15" Stroke="#E0E0E0" BackgroundColor="#FFFFFF">
+                        <!-- Arredondamento das bordas no padrão Border do MAUI -->
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="5">
                             <Label Text="{Binding Nome}" FontAttributes="Bold" FontSize="18" TextColor="#2B0B98"/>
-                            <Label Text="{Binding Especie, StringFormat='Espécie: {0}'}" FontSize="14" TextColor="#555"/>
-                            <Label Text="{Binding Status, StringFormat='Status: {0}'}" FontSize="14" TextColor="Gray"/>
+                            <Label Text="{Binding Status}" FontAttributes="Italic" FontSize="13" TextColor="#666"/>
+                            <Label Text="{Binding Especie}" FontSize="14" TextColor="#555"/>
+                            <Label Text="{Binding Raca}" FontSize="14" TextColor="#555"/>
+                            <Label Text="{Binding Porte}" FontSize="12" TextColor="#777"/>
+                            <Label Text="{Binding Sexo}" FontSize="12" TextColor="#777"/>
+                            <Label Text="{Binding Cor}" FontSize="12" TextColor="#777"/>
+                            <Label Text="{Binding Descricao}" FontSize="12" TextColor="#666" Margin="0,5,0,5"/>
 
-                            <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
-                                <!-- Botões com a referência ao Pet exato daquele cartão -->
-                                <Button Text="Editar" 
-                                        BackgroundColor="#ffc107" 
-                                        TextColor="Black" 
-                                        CommandParameter="{Binding .}" 
-                                        Clicked="OnEditarClicked" 
-                                        HorizontalOptions="FillAndExpand"/>
-
-                                <Button Text="Excluir" 
-                                        BackgroundColor="#dc3545" 
-                                        TextColor="White" 
-                                        CommandParameter="{Binding .}" 
-                                        Clicked="OnExcluirClicked" 
-                                        HorizontalOptions="FillAndExpand"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </Frame>
+                            <HorizontalStackLayout Spacing="10" Margin="0,10,0,0">
+                                <Button Text="Editar" BackgroundColor="#ffc107" TextColor="Black" CommandParameter="{Binding .}" Clicked="OnEditarClicked"/>
+                                <Button Text="Excluir" BackgroundColor="#dc3545" TextColor="White" CommandParameter="{Binding .}" Clicked="OnExcluirClicked"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
     </Grid>
-
 </ContentPage>

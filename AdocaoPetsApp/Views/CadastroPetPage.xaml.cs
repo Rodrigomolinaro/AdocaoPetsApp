@@ -22,17 +22,13 @@ namespace AdocaoPetsApp.Views
 
         private async void OnSalvarClicked(object sender, EventArgs e)
         {
-            // --- INÍCIO DA BLINDAGEM DE SEGURANÇA ---
             if (string.IsNullOrWhiteSpace(NomeEntry.Text) || string.IsNullOrWhiteSpace(EspecieEntry.Text))
             {
                 await DisplayAlert("Aviso", "O Nome e a Espécie do pet são obrigatórios!", "OK");
-                return; // Impede que o código continue e aborte o salvamento
+                return;
             }
-            // --- FIM DA BLINDAGEM ---
 
-            // Pega a idade com segurança
-            int idade = 0;
-            int.TryParse(IdadeEntry.Text, out idade);
+            int.TryParse(IdadeEntry.Text, out int idade);
 
             var novoPet = new Pet
             {
@@ -45,30 +41,28 @@ namespace AdocaoPetsApp.Views
                 Sexo = SexoEntry.Text,
                 Cor = CorEntry.Text,
                 Descricao = DescricaoEntry.Text,
-                IdUsuario = _ongLogada.IdOng // O Pet agora fica amarrado à ONG
+                IdOng = _ongLogada.IdOng,
+                Status = "Disponível", // Define o pet visível para adoção
+                Adotado = false // Confirma que não foi adotado (tinyint no MySQL)
             };
 
-            _database.Pets.Add(novoPet);
-            bool sucesso = await _database.SaveChangesAsync() > 0;
-
-            if (sucesso)
+            try
             {
-                await DisplayAlert("Sucesso", "Pet cadastrado com sucesso!", "OK");
+                _database.Pets.Add(novoPet);
+                bool sucesso = await _database.SaveChangesAsync() > 0;
 
-                // Limpa os campos do formulário para o próximo cadastro
-                NomeEntry.Text = "";
-                EspecieEntry.Text = "";
-                RacaEntry.Text = "";
-                IdadeEntry.Text = "";
-                ImagemUrlEntry.Text = "";
-                PorteEntry.Text = "";
-                SexoEntry.Text = "";
-                CorEntry.Text = "";
-                DescricaoEntry.Text = "";
+                if (sucesso)
+                {
+                    await DisplayAlert("Sucesso", "Pet cadastrado com sucesso!", "OK");
+
+                    // Envia a ONG diretamente para a tela atualizada com a lista de pets
+                    await Navigation.PushAsync(new GerenciarPetsPage(_database, _ongLogada));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Erro", "Ocorreu um erro ao salvar o pet.", "OK");
+                string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                await DisplayAlert("Erro do Banco", erroReal, "OK");
             }
         }
 

@@ -34,20 +34,18 @@ namespace AdocaoPetsApp.Views
 
         private async void OnSalvarClicked(object sender, EventArgs e)
         {
-            // --- INÍCIO DA BLINDAGEM DE SEGURANÇA ---
+            // --- BLINDAGEM DE SEGURANÇA ---
             if (string.IsNullOrWhiteSpace(NomeEntry.Text) || string.IsNullOrWhiteSpace(EspecieEntry.Text))
             {
                 await DisplayAlert("Aviso", "O Nome e a Espécie do pet são obrigatórios!", "OK");
-                return; // Impede que o código continue e aborte o salvamento
+                return;
             }
-            // --- FIM DA BLINDAGEM ---
 
-            // Sobrescreve os dados do pet já existente na memória
+            // --- ATUALIZAÇÃO COMPLETA DE TODOS OS CAMPOS ---
             _petAtual.Nome = NomeEntry.Text;
             _petAtual.Especie = EspecieEntry.Text;
             _petAtual.Raca = RacaEntry.Text;
 
-            // Tratamento seguro para idade (permite que fique vazia/nula)
             int idade = 0;
             if (int.TryParse(IdadeEntry.Text, out idade))
                 _petAtual.Idade = idade;
@@ -60,15 +58,16 @@ namespace AdocaoPetsApp.Views
             _petAtual.Cor = CorEntry.Text;
             _petAtual.Descricao = DescricaoEntry.Text;
 
-            // Envia a ordem de UPDATE para o Entity Framework sobrescrever no MySQL
+            // Garante que o ID da ONG se mantém intacto
+            // _petAtual.IdOng = _petAtual.IdOng; 
+
+            // Envia o UPDATE para o banco de dados na nuvem
             _database.Pets.Update(_petAtual);
             bool sucesso = await _database.SaveChangesAsync() > 0;
 
             if (sucesso)
             {
                 await DisplayAlert("Sucesso", "Dados do pet atualizados com sucesso!", "OK");
-
-                // Fecha a tela de edição e volta automaticamente para a lista de pets da ONG
                 await Navigation.PopAsync();
             }
             else
