@@ -17,8 +17,12 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!-- Cartão do Pedido -->
-                    <Frame Margin="0,0,0,15" Padding="15" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
+                    <!-- Substituição do Frame obsoleto por Border -->
+                    <Border Margin="0,0,0,15" Padding="15" Stroke="LightGray" BackgroundColor="White">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+
                         <StackLayout Spacing="5">
                             <Label Text="{Binding NomePet, StringFormat='🐾 Pet: {0}'}" FontAttributes="Bold" FontSize="18" TextColor="#333"/>
                             <Label Text="{Binding NomeAdotante, StringFormat='👤 Adotante: {0}'}" FontSize="15" TextColor="#555"/>
@@ -33,10 +37,9 @@
                                     CommandParameter="{Binding .}"
                                     Clicked="OnAprovarClicked"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
     </Grid>
-
 </ContentPage>

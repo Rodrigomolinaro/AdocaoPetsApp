@@ -1,19 +1,20 @@
 using AdocaoPetsApp.Data;
 using AdocaoPetsApp.Models;
+using Microsoft.EntityFrameworkCore; // Necessário para a busca blindada do Entity Framework
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.ApplicationModel; // Necessário para o MainThread
 
 namespace AdocaoPetsApp.Views
 {
     public partial class ListagemPetsPage : ContentPage
     {
         private readonly DatabaseContext _database;
-        private readonly Usuario _usuarioLogado; // Guarda quem está logado
-        private List<Pet> _listaCompletaPets = new(); // Guarda todos os pets vindos do banco
+        private readonly Usuario _usuarioLogado;
+        private List<Pet> _listaCompletaPets = new();
 
-        // O construtor recebe a conexão e o utilizador logado (null se for a ONG a ver a lista)
         public ListagemPetsPage(DatabaseContext database, Usuario usuarioLogado = null)
         {
             InitializeComponent();
@@ -25,11 +26,29 @@ namespace AdocaoPetsApp.Views
         {
             base.OnAppearing();
 
-            // Busca todos os pets disponíveis no MySQL
-            _listaCompletaPets = await _database.ObterPetsDisponiveisAsync();
+            try
+            {
+                // Busca direta blindada: puxa apenas os que estão explicitamente disponíveis
+                var petsDoBanco = await _database.Pets
+                    .Where(p => p.Status == "Disponível" && p.Adotado == false)
+                    .ToListAsync();
 
-            // Exibe todos por padrão ao abrir a tela
-            PetsCollectionView.ItemsSource = _listaCompletaPets;
+                // Atualiza a interface gráfica na Thread principal do Android
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    _listaCompletaPets = petsDoBanco;
+                    PetsCollectionView.ItemsSource = _listaCompletaPets;
+                });
+            }
+            catch (Exception ex)
+            {
+                // Intercepta a falha fatal e mostra no ecrã sem fechar o app
+                string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    await DisplayAlert("Erro de Conexão", $"Falha ao carregar a vitrine: {erroReal}", "OK");
+                });
+            }
         }
 
         // --- MÉTODOS DE FILTRAGEM ---
@@ -41,7 +60,6 @@ namespace AdocaoPetsApp.Views
 
         private void OnFiltrarCachorroClicked(object sender, EventArgs e)
         {
-            // Filtra por espécie
             PetsCollectionView.ItemsSource = _listaCompletaPets
                 .Where(p => p.Especie != null && p.Especie.Equals("Cachorro", StringComparison.OrdinalIgnoreCase))
                 .ToList();
@@ -49,7 +67,6 @@ namespace AdocaoPetsApp.Views
 
         private void OnFiltrarGatoClicked(object sender, EventArgs e)
         {
-            // Filtra por espécie
             PetsCollectionView.ItemsSource = _listaCompletaPets
                 .Where(p => p.Especie != null && p.Especie.Equals("Gato", StringComparison.OrdinalIgnoreCase))
                 .ToList();
@@ -62,23 +79,21 @@ namespace AdocaoPetsApp.Views
             var botao = sender as Button;
             var petSelecionado = botao?.CommandParameter as Pet;
 
-            // Validação 1: O botão conseguiu ler os dados do pet?
             if (petSelecionado == null)
             {
-                await DisplayAlert("Erro", "O sistema não conseguiu identificar qual é o pet deste cartão. Verifique o XAML.", "OK");
+                await DisplayAlert("Erro", "O sistema não conseguiu identificar qual é o pet deste cartão.", "OK");
                 return;
             }
 
-            // Validação 2: É um adotante logado ou é a ONG?
             if (_usuarioLogado == null)
             {
-                await DisplayAlert("Acesso Restrito", "Apenas Adotantes registados podem solicitar adoções.", "OK");
+                await DisplayAlert("Acesso Restrito", "Apenas adotantes logados podem solicitar adoções.", "OK");
                 return;
             }
 
-            // Tentativa de gravação no banco de dados MySQL
             try
             {
+                // Dispara o pedido no banco de dados usando o método do seu DatabaseContext
                 bool sucesso = await _database.SolicitarAdocaoAsync(_usuarioLogado.IdUsuario, petSelecionado.IdPet);
 
                 if (sucesso)
@@ -94,10 +109,11 @@ namespace AdocaoPetsApp.Views
             }
             catch (Exception ex)
             {
-                // Mostra exatamente o erro que o banco de dados devolver
-                await DisplayAlert("Erro no Banco de Dados", ex.Message, "OK");
+                string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                await DisplayAlert("Erro no Banco de Dados", erroReal, "OK");
             }
         }
+
         private async void OnMinhasAdocoesClicked(object sender, EventArgs e)
         {
             if (_usuarioLogado == null)

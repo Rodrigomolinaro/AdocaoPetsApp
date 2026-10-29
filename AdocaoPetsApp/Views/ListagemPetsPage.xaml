@@ -18,27 +18,23 @@
             <Button Text="Todos" Clicked="OnFiltrarTodosClicked" BackgroundColor="#6c757d" TextColor="White" HeightRequest="35" CornerRadius="15"/>
             <Button Text="Cachorros 🐶" Clicked="OnFiltrarCachorroClicked" BackgroundColor="#2B0B98" TextColor="White" HeightRequest="35" CornerRadius="15"/>
             <Button Text="Gatos 🐱" Clicked="OnFiltrarGatoClicked" BackgroundColor="#2B0B98" TextColor="White" HeightRequest="35" CornerRadius="15"/>
-            <Button Text="Minhas Adoções" 
-        Clicked="OnMinhasAdocoesClicked" 
-        BackgroundColor="#007bff" 
-        TextColor="White" 
-        Margin="0,0,0,10"
-        CornerRadius="8"/>
+            <Button Text="Minhas Adoções" Clicked="OnMinhasAdocoesClicked" BackgroundColor="#007bff" TextColor="White" Margin="0,0,0,10" CornerRadius="8"/>
         </HorizontalStackLayout>
 
         <!-- Linha 2: A Coleção de Pets com Rolagem -->
         <CollectionView Grid.Row="2" x:Name="PetsCollectionView">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Margin="0,5,0,5" Padding="15" CornerRadius="8" BorderColor="LightGray" HasShadow="True">
-                        <VerticalStackLayout>
+                    <!-- Substituição de Frame por Border para evitar o aviso de obsolescência -->
+                    <Border Margin="0,5,0,5" Padding="15" Stroke="LightGray" BackgroundColor="White">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
 
+                        <VerticalStackLayout>
                             <!-- Imagem compacta e centralizada -->
                             <Grid HeightRequest="150" WidthRequest="300" HorizontalOptions="Center" Margin="0,0,0,10">
-                                <Image Source="{Binding ImagemUrl}" 
-                                       Aspect="AspectFill"
-                                       HeightRequest="150"
-                                       WidthRequest="300" />
+                                <Image Source="{Binding ImagemUrl}" Aspect="AspectFill" HeightRequest="150" WidthRequest="300" />
                             </Grid>
 
                             <Label Text="{Binding Nome}" FontSize="18" FontAttributes="Bold" TextColor="#2B0B98"/>
@@ -50,7 +46,6 @@
                                 <Label Text="{Binding Raca}" />
                             </HorizontalStackLayout>
 
-                            <!-- Linha com os novos dados vindos do banco -->
                             <HorizontalStackLayout Spacing="5" Margin="0,3,0,0">
                                 <Label Text="Porte:" FontAttributes="Bold"/>
                                 <Label Text="{Binding Porte}" />
@@ -63,15 +58,15 @@
                             <Label Text="{Binding IdOng, StringFormat='ID da ONG responsável: {0}'}" FontSize="12" TextColor="Gray" Margin="0,5,0,0"/>
 
                             <Button Text="Quero Adotar" 
-        Clicked="OnAdotarClicked" 
-        CommandParameter="{Binding .}" 
-        BackgroundColor="#FF6A00" 
-        TextColor="White" 
-        CornerRadius="10" 
-        FontAttributes="Bold"/>
-
+                                    Clicked="OnAdotarClicked" 
+                                    CommandParameter="{Binding .}" 
+                                    BackgroundColor="#FF6A00" 
+                                    TextColor="White" 
+                                    CornerRadius="10" 
+                                    FontAttributes="Bold"
+                                    Margin="0,10,0,0"/>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
 

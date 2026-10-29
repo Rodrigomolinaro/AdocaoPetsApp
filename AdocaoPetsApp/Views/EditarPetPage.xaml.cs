@@ -46,8 +46,7 @@ namespace AdocaoPetsApp.Views
             _petAtual.Especie = EspecieEntry.Text;
             _petAtual.Raca = RacaEntry.Text;
 
-            int idade = 0;
-            if (int.TryParse(IdadeEntry.Text, out idade))
+            if (int.TryParse(IdadeEntry.Text, out int idade))
                 _petAtual.Idade = idade;
             else
                 _petAtual.Idade = null;
@@ -58,21 +57,29 @@ namespace AdocaoPetsApp.Views
             _petAtual.Cor = CorEntry.Text;
             _petAtual.Descricao = DescricaoEntry.Text;
 
-            // Garante que o ID da ONG se mantém intacto
-            // _petAtual.IdOng = _petAtual.IdOng; 
-
-            // Envia o UPDATE para o banco de dados na nuvem
-            _database.Pets.Update(_petAtual);
-            bool sucesso = await _database.SaveChangesAsync() > 0;
-
-            if (sucesso)
+            try
             {
-                await DisplayAlert("Sucesso", "Dados do pet atualizados com sucesso!", "OK");
-                await Navigation.PopAsync();
+                // Envia o UPDATE para o banco de dados na nuvem
+                _database.Pets.Update(_petAtual);
+                bool sucesso = await _database.SaveChangesAsync() > 0;
+
+                if (sucesso)
+                {
+                    await DisplayAlert("Sucesso", "Dados do pet atualizados com sucesso!", "OK");
+
+                    // Retorna automaticamente para a GerenciarPetsPage
+                    await Navigation.PopAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Aviso", "Nenhuma alteração foi identificada para salvar.", "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Erro", "Ocorreu um erro ao atualizar o pet.", "OK");
+                // Impede o crash do Android e mostra o erro real
+                string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                await DisplayAlert("Erro Crítico", $"Falha ao atualizar o banco: {erroReal}", "OK");
             }
         }
     }

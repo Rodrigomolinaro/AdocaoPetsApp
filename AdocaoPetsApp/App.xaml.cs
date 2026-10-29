@@ -1,14 +1,18 @@
-﻿namespace AdocaoPetsApp;
-
+﻿using AdocaoPetsApp.Data;
 using AdocaoPetsApp.Views;
+using Microsoft.Maui.Controls;
 
-public partial class App : Application
+namespace AdocaoPetsApp
 {
-    public App(LoginPage loginPage)
+    public partial class App : Application
     {
-        InitializeComponent();
+        public App()
+        {
+            InitializeComponent();
 
-        // O NavigationPage habilita a navegação entre as telas e cria a barra superior nativa
-        MainPage = new NavigationPage(loginPage);
+            // Instancia o contexto do banco de dados e abre o login de forma segura
+            var databaseContext = new DatabaseContext();
+            MainPage = new NavigationPage(new LoginPage(databaseContext));
+        }
     }
 }
