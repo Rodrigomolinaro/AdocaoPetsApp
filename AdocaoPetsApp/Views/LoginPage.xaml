@@ -4,46 +4,71 @@
              x:Class="AdocaoPetsApp.Views.LoginPage"
              Title="Bem-vindo(a)!">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+    <Grid>
 
-            <Label Text="🐾 Adote um Pet" 
-                   FontSize="32" 
+        <!-- ========================================== -->
+        <!-- O SEU VISUAL EXATO E ORIGINAL FICA AQUI    -->
+        <!-- ========================================== -->
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+
+                <Label Text="🐾 Adote um Pet" 
+                       FontSize="32" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="#2c3e50"
+                       Margin="0, 0, 0, 40"/>
+
+                <Entry x:Name="EmailOuDocumentoEntry" 
+                       Placeholder="E-mail, CPF ou CNPJ" 
+                       Keyboard="Default" 
+                       ClearButtonVisibility="WhileEditing"/>
+
+                <Entry x:Name="SenhaEntry" 
+                       Placeholder="Digite a sua senha" 
+                       IsPassword="True" 
+                       ClearButtonVisibility="WhileEditing"/>
+
+                <Button Text="Entrar" 
+                        Clicked="OnLoginClicked" 
+                        BackgroundColor="#5cb85c" 
+                        TextColor="White" 
+                        CornerRadius="8"
+                        Margin="0, 20, 0, 0"/>
+
+                <!-- Botões de navegação para os cadastros previstos na Sprint 1 -->
+                <Button Text="Quero adotar (Cadastro Pessoa Física)" 
+                        Clicked="OnIrParaCadastroAdotanteClicked" 
+                        BackgroundColor="Transparent" 
+                        TextColor="#007bff" 
+                        CornerRadius="8"/>
+
+                <Button Text="Sou uma ONG (Cadastro Instituição)" 
+                        Clicked="OnIrParaCadastroOngClicked" 
+                        BackgroundColor="Transparent" 
+                        TextColor="#e67e22" 
+                        CornerRadius="8"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ========================================== -->
+        <!-- CAMADA DE CARREGAMENTO (Invisível por padrão)-->
+        <!-- ========================================== -->
+        <Grid x:Name="LoadingOverlay" BackgroundColor="#CC000000" IsVisible="False" ZIndex="10">
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference LoadingOverlay}}" 
+                               Color="White" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               WidthRequest="60" 
+                               HeightRequest="60"/>
+            <Label Text="A conectar ao servidor..." 
+                   TextColor="White" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
-                   TextColor="#2c3e50"
-                   Margin="0, 0, 0, 40"/>
+                   VerticalOptions="Center" 
+                   Margin="0,90,0,0"/>
+        </Grid>
 
-            <Entry x:Name="EmailOuDocumentoEntry" 
-                   Placeholder="E-mail, CPF ou CNPJ" 
-                   Keyboard="Default" 
-                   ClearButtonVisibility="WhileEditing"/>
-
-            <Entry x:Name="SenhaEntry" 
-                   Placeholder="Digite a sua senha" 
-                   IsPassword="True" 
-                   ClearButtonVisibility="WhileEditing"/>
-
-            <Button Text="Entrar" 
-                    Clicked="OnLoginClicked" 
-                    BackgroundColor="#5cb85c" 
-                    TextColor="White" 
-                    CornerRadius="8"
-                    Margin="0, 20, 0, 0"/>
-
-            <!-- Botões de navegação para os cadastros previstos na Sprint 1 -->
-            <Button Text="Quero adotar (Cadastro Pessoa Física)" 
-                    Clicked="OnIrParaCadastroAdotanteClicked" 
-                    BackgroundColor="Transparent" 
-                    TextColor="#007bff" 
-                    CornerRadius="8"/>
-
-            <Button Text="Sou uma ONG (Cadastro Instituição)" 
-                    Clicked="OnIrParaCadastroOngClicked" 
-                    BackgroundColor="Transparent" 
-                    TextColor="#e67e22" 
-                    CornerRadius="8"/>
-
-        </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>

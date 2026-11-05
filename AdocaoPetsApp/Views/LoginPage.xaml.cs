@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AdocaoPetsApp.Models;
 using AdocaoPetsApp.Data;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Networking; // Adicionado para a verificação de internet
 using AdocaoPetsApp.Views;
 
 namespace AdocaoPetsApp.Views
@@ -20,16 +21,28 @@ namespace AdocaoPetsApp.Views
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
+            // 1. VERIFICAÇÃO DE REDE IMEDIATA
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await DisplayAlert("Sem Conexão", "Verifique a sua ligação à internet e tente novamente.", "OK");
+                return; // Para a execução aqui, evitando erros de timeout com o banco
+            }
+
+            string login = EmailOuDocumentoEntry.Text?.Trim();
+            string senha = SenhaEntry.Text?.Trim();
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
+            {
+                await DisplayAlert("Aviso", "Por favor, preencha todos os campos.", "OK");
+                return;
+            }
+
             try
             {
-                string login = EmailOuDocumentoEntry.Text?.Trim();
-                string senha = SenhaEntry.Text?.Trim();
-
-                if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(senha))
-                {
-                    await DisplayAlert("Aviso", "Por favor, preencha todos os campos.", "OK");
-                    return;
-                }
+                // 2. ATIVA A TELA DE CARREGAMENTO
+                // (Requer que o 'Grid x:Name="LoadingOverlay"' esteja no seu XAML)
+                if (LoadingOverlay != null)
+                    LoadingOverlay.IsVisible = true;
 
                 // 1. TENTA ENCONTRAR COMO ADOTANTE
                 var usuarioLogado = await _database.Usuarios
@@ -60,6 +73,12 @@ namespace AdocaoPetsApp.Views
             {
                 string erroReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 await DisplayAlert("Erro Crítico", $"{erroReal}\n\nRastreio:\n{ex.StackTrace}", "OK");
+            }
+            finally
+            {
+                // 3. DESATIVA A TELA DE CARREGAMENTO SEMPRE (com sucesso ou erro)
+                if (LoadingOverlay != null)
+                    LoadingOverlay.IsVisible = false;
             }
         }
 
